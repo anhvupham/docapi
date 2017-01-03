@@ -15,6 +15,7 @@ Docapi uses a number of open source projects to work properly:
 * [Redis] - An in-memory data structure store, used as a database, cache and message broker
 * [Ace Editor] - awesome web-based text editor
 * [node.js] - evented I/O for the backend
+* [Docker] - Docker is the world’s leading software containerization platform
 
 And of course Docapi itself is open source with a [public repository][docapi]
  on GitHub.
@@ -31,6 +32,7 @@ And of course Docapi itself is open source with a [public repository][docapi]
    [Redis]: <https://redis.io/>
    [Ace Editor]: <http://ace.ajax.org>
    [node.js]: <http://nodejs.org>
+   [Docker]: <http://docker.com>
 
    
 
