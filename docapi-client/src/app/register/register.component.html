@@ -1,0 +1,24 @@
+<md-card>
+  <form #f="ngForm" (ngSubmit)="register($event)">
+    <md-card-content>
+      <p>
+        <md-input-container class="fullwidth">
+          <input md-input placeholder="First Name" required [(ngModel)]="user.firstName" name="firstname">
+        </md-input-container>
+        <md-input-container class="fullwidth">
+          <input md-input placeholder="Last Name" required [(ngModel)]="user.lastName" name="lastname">
+        </md-input-container>
+        <md-input-container class="fullwidth">
+          <input md-input placeholder="Username" required [(ngModel)]="user.username" name="username">
+        </md-input-container>
+        <md-input-container class="fullwidth">
+          <input type="password" md-input placeholder="Password" required [(ngModel)]="user.password" name="password">
+        </md-input-container>
+      </p>
+    </md-card-content>
+    <md-card-actions>
+      <a routerLink='/login' class="register">Login</a>
+      <button md-raised-button type="submit" class="login-btn" [disabled]="!f.valid">Register</button>
+    </md-card-actions>
+  </form>
+</md-card>

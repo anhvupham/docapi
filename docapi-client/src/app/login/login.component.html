@@ -1,0 +1,16 @@
+<md-card class="card">
+  <form #f="ngForm" (ngSubmit)="login()">
+    <md-card-content>
+      <md-input-container class="fullwidth">
+        <input md-input placeholder="Username" required [(ngModel)]="user.username" name="username">
+      </md-input-container>
+      <md-input-container class="fullwidth">
+        <input md-input type="password" placeholder="Password" required [(ngModel)]="user.password" name="password">
+      </md-input-container>
+    </md-card-content>
+    <md-card-actions>
+      <a routerLink='/register' class="register">Register</a>
+      <button md-raised-button type="submit" color="primary" class="login-btn" [disabled]="!f.valid">Login</button>
+    </md-card-actions>
+  </form>
+</md-card>

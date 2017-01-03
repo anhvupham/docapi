@@ -1,0 +1,31 @@
+<md-sidenav-layout fullscreen class="main">
+  <md-sidenav #sidenav [mode]="navMode" [opened]="!isMobile">
+    <md-nav-list>
+      <a md-list-item *ngFor="let project of projectService.projects | async" (click)="loadRoute(project)">
+        <span md-line>{{project.name}}</span>
+      </a>
+      <md-divider></md-divider>
+      <a md-list-item (click)="newProject()">
+        <span md-line>New Project</span>
+      </a>
+      <md-divider></md-divider>
+      <a md-list-item (click)="logout()">
+        <span md-line>Logout</span>
+      </a>
+    </md-nav-list>
+  </md-sidenav>
+  <md-toolbar color="primary">
+    <button md-icon-button class="nav-menu" (click)="sidenav.toggle()">
+      <md-icon>menu</md-icon>
+    </button>
+    <span [class.hidden]="editMode">{{pageTitle}}</span>
+    <form [formGroup]="form" class="editProject" [class.hidden]="!editMode">
+      <input formControlName="projectName">
+    </form>
+    <span class="project-spacer"></span>
+    <md-icon class="project-icon" [class.hidden]="!viewProject || !editMode" (click)="exitEditProject()">close</md-icon>
+    <md-icon class="project-icon" [class.hidden]="!viewProject || editMode" (click)="editProject()">edit</md-icon>
+    <md-icon class="project-icon" [class.hidden]="!viewProject" (click)="removeProject()">delete</md-icon>
+  </md-toolbar>
+  <router-outlet></router-outlet>
+</md-sidenav-layout>

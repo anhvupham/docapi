@@ -1,0 +1,23 @@
+.card {
+  width: 300px;
+  height: 180px;
+  margin: 115px auto;
+}
+
+.fullwidth {
+  width: 100%;
+}
+
+.register {
+  font-size: 12px;
+  padding-bottom: 10px;
+  display: block;
+  text-align: center;
+}
+
+.login-btn {
+  background-color: #03A9F4;
+  color: #fff;
+  display: block;
+  margin: 0 auto;
+}

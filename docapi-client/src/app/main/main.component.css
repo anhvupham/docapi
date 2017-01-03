@@ -1,0 +1,37 @@
+.main md-sidenav {
+  width: 200px;
+}
+
+.nav-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-menu {
+    display: block;
+  }
+}
+
+.project-icon {
+  padding: 0 14px;
+}
+
+.project-icon:hover {
+  cursor: pointer;
+}
+
+.project-spacer {
+  flex: 1 1 auto;
+}
+
+.editProject {
+  width: 100%;
+}
+
+.editProject input {
+  line-height: 20px;
+  width: 100%;
+  font-size: 15px;
+}
+
+

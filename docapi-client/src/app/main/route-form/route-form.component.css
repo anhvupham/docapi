@@ -1,0 +1,12 @@
+[ace-editor] {
+  margin-bottom: 15px;
+}
+
+label {
+  color: rgba(0,0,0,.38);
+  margin-bottom: 5px;
+}
+
+md-card-actions {
+  text-align: center
+}

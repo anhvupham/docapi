@@ -1,0 +1,23 @@
+version: '2'
+services:
+  mongodb:
+    image: 'bitnami/mongodb:latest'
+    ports: #optional
+      - "27017:27017"
+    volumes:
+      - ./data/db:/bitnami/mongodb
+    environment:
+      - MONGODB_USERNAME=docapi
+      - MONGODB_PASSWORD=mongopass
+      - MONGODB_DATABASE=docapi
+  redis:
+    image: redis
+  backend:
+    build: ./docapi-server
+    ports:
+      - "1337:1337"
+    volumes: #for development mode
+      - ./docapi-server:/var/www
+    depends_on:
+      - mongodb
+      - redis

@@ -1,0 +1,10 @@
+.new-route {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.md-list-avatar:hover {
+  cursor: pointer;
+  background-color: #eee;
+}

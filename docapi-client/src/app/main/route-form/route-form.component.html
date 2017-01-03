@@ -1,0 +1,48 @@
+<form [formGroup]="form" (ngSubmit)="formSubmit.emit(form.value)">
+  <md-card-content>
+    <md-input-container class="fullwidth" [class.hidden]="readOnly">
+      <input md-input placeholder="Path" formControlName="path">
+    </md-input-container>
+    <div [class.hidden]="!readOnly">
+      <label>Path: </label>{{data.path}}
+    </div>
+    <br/>
+    <br/>
+    <md-select placeholder="Method" formControlName="method" class="fullwidth" [class.hidden]="readOnly">
+      <md-option *ngFor="let method of methods" [value]="method.value">
+        {{method.value}}
+      </md-option>
+    </md-select>
+    <div [class.hidden]="!readOnly">
+      <label>Method: </label>{{data.method}}
+    </div>
+    <br/>
+    <br/>
+    <label>Request Header</label>
+    <div ace-editor [text]="data.requestHeader" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'requestHeader')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+
+    <label>Request Body</label>
+    <div ace-editor [text]="data.requestBody" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'requestBody')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+
+    <label>Response Success Header</label>
+    <div ace-editor [text]="data.responseSuccessHeader" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'responseSuccessHeader')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+
+    <label>Response Success Body</label>
+    <div ace-editor [text]="data.responseSuccessBody" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'responseSuccessBody')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+
+    <label>Response Fail Header</label>
+    <div ace-editor [text]="data.responseFailHeader" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'responseFailHeader')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+
+    <label>Response Fail Body</label>
+    <div ace-editor [text]="data.responseFailBody" [readOnly]="readOnly" [theme]="'eclipse'" [autoUpdateContent]="true" (textChanged)="onChange($event, 'responseFailBody')"
+      style="min-height: 200px; width:100%; overflow: auto;"></div>
+  </md-card-content>
+  <md-card-actions>
+    <button md-raised-button color="primary" type="submit" [disabled]="!form.valid" [class.hidden]="readOnly || editMode">Save</button>
+  </md-card-actions>
+</form>

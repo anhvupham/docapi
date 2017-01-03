@@ -1,0 +1,12 @@
+<md-card class="card">
+  <form #f="ngForm" (ngSubmit)="submit()">
+    <md-card-content>
+      <md-input-container class="fullwidth">
+        <input md-input placeholder="Name" required [(ngModel)]="name" name="name">
+      </md-input-container>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button type="submit" [disabled]="!f.valid">Save</button>
+    </md-card-actions>
+  </form>
+</md-card>
