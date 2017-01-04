@@ -5,9 +5,9 @@ RUN apt-get update -y
 RUN apt-get install nano curl wget -y
 
 RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs
+    apt-get install -y nodejs npm
 
-RUN npm install -g sails npm
+RUN npm install -g sails
 
 ENV DIR /var/www
 
