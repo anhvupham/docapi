@@ -30,6 +30,8 @@ export class RouteFormComponent {
 
   @Output() formSubmit = new EventEmitter();
 
+  @Output() autoSave = new EventEmitter();
+
   @Input()
   set projectId(id: string) {
     this.form.patchValue({
@@ -66,7 +68,7 @@ export class RouteFormComponent {
     });
 
     this.form.valueChanges.debounceTime(500).skip(1).subscribe(value => {
-      this.formSubmit.emit(value);
+      this.autoSave.emit(value);
     });
   }
 

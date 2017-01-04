@@ -3,7 +3,7 @@ import { MessageService } from './message.service';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
 import { BaseService } from './base.service';
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Http, Headers, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
@@ -13,114 +13,83 @@ declare var io: any;
 
 @Injectable()
 export class ProjectService extends BaseService {
-    private _projects: BehaviorSubject<List<Project>> = new BehaviorSubject(List([]))
+	private _projects: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
+	private zone: NgZone;
 
-    get projects() {
-        return this._projects.asObservable();
-    }
+	get projects() {
+		return this._projects.asObservable();
+	}
 
-    constructor(
-        private http: Http,
-        private authService: AuthService,
-        private messageService: MessageService) {
+	constructor(
+		private http: Http,
+		private authService: AuthService,
+		private messageService: MessageService) {
 
-        super(authService);
+		super(authService);
 
-        this.getProjects();
+		this.zone = new NgZone({enableLongStackTrace: false});
 
-        io.socket.on('project', resp => { 
-            let verb = resp.verb;
-            let id = verb.id;
-            let projects;
-            switch (verb) {
-                case "created":
-                    this._projects.next(this._projects.getValue().push(new Project(resp.data)));
-                    break;
-                case "updated":
-                    projects = List(this._projects.getValue());
-                    projects.forEach((prj: Project) => {
-                        if (prj.id === id) {
-                            prj.name = name;
-                        }
-                    });
-                    this._projects.next(List(this._projects.getValue()));
-                    break;
-                case "destroyed":
-                    projects = this._projects.getValue().filter((prj: Project) => prj.id !== id).toList();
-                    this._projects.next(projects);
-                    break;
-                default:
-                    break;
-            } 
-        });
-    }
+		this.getProjects();
 
-    updateProject(name: string, id: string): Observable<any> {
-        let obs = this.http.put('/api/projects/' + id, { name: name }, this.requestOptions)
-            .map((response: Response) => response.json());
+		io.socket.on('project', function(resp) {
+			let verb = resp.verb;
+			let id = resp.id;
+			let projects;
+			switch (verb) {
+				case "created":
+					projects = this._projects.getValue();
+					projects.push(resp.data);
+					this.publish(projects);
+					break;
+				case "updated":
+					projects = this._projects.getValue();
+					projects.forEach((prj: Project) => {
+						if (prj.id === id) {
+							prj.name = resp.data.name;
+						}
+					});
+					this.publish(projects);
+					break;
+				case "destroyed":
+					projects = this._projects.getValue().filter((prj: Project) => prj.id !== id);
+					this.publish(projects);
+					break;
+				default:
+					break;
+			}
+		}.bind(this));
+	}
 
-        // obs.subscribe(resp => {
-        //     let projects = List(this._projects.getValue());
-        //     projects.forEach((prj: Project) => {
-        //         if (prj.id === id) {
-        //             prj.name = name;
-        //         }
-        //     });
-        //     this._projects.next(projects);
-        // },
-        //     resp => console.log(resp));
+	private publish(data) {
+		this.zone.run(() => {
+			this._projects.next(data);
+		})
+	}
 
-        return obs;
-    }
+	updateProject(name: string, id: string): Observable<any> {
+		return this.http.put('/api/projects/' + id, { name: name }, this.requestOptions)
+			.map((response: Response) => response.json());
+	}
 
-    deleteProject(id: string): Observable<any> {
-        let obs = this.http.delete('/api/projects/' + id, this.requestOptions)
-            .map((response: Response) => response.json()).share();
+	deleteProject(id: string): Observable<any> {
+		return this.http.delete('/api/projects/' + id, this.requestOptions)
+			.map((response: Response) => response.json());
+	}
 
-        // obs.subscribe(resp => {
-        //     let projects = this._projects.getValue().filter((prj: Project) => prj.id !== id).toList();
-            
-        //     this._projects.next(projects);
-        // },
-        //     resp => console.log(resp));
+	newProject(name: string): Observable<any> {
+		return this.http.post('/api/projects', { name: name }, this.requestOptions)
+			.map((response: Response) => response.json());
+	}
 
-        return obs;
-    }
-
-    newProject(name: string): Observable<any> {
-        let obs = this.http.post('/api/projects', { name: name }, this.requestOptions)
-            .map((response: Response) => response.json()).share();
-
-        // obs.subscribe({
-        //     next: resp => {
-        //         this._projects.next(this._projects.getValue().push(resp));
-        //     },
-        //     error: resp => console.log(resp)
-        // })
-
-        return obs;
-    }
-
-    getProjects() {
-        // this.http.get('/api/projects', this.requestOptions)
-        //     .map((response: Response) => response.json())
-        //     .subscribe(resp => {
-        //         let projects = resp.map(prj => new Project(prj)) as Project[];
-
-        //         this._projects.next(List(projects));
-        //     },
-        //     this.messageService.error.bind(this.messageService));
-
-        io.socket.request({ //subcribe to sails socket and get project list as well
-            url: '/api/projects',
-            method: 'GET',
-            headers: {
-                "Authentication": "Bearer " + this.authService.token
-            }
-        }, (resp, jwres) => { 
-            let projects = resp.map(prj => new Project(prj)) as Project[];
-
-            this._projects.next(List(projects));
-        })
-    }
+	private getProjects() {
+		io.socket.request({ //subcribe to sails socket and get project list as well
+			url: '/api/projects',
+			method: 'GET',
+			headers: {
+				"Authentication": "Bearer " + this.authService.token
+			}
+		}, resp => {
+			this.publish(resp as Project[]);
+		});
+	}
 }

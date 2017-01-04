@@ -2,7 +2,7 @@ version: '2'
 services:
   mongodb:
     image: 'bitnami/mongodb:latest'
-    ports: #optional
+    ports: #optional, for development purpose
       - "27017:27017"
     volumes:
       - ./data/db:/bitnami/mongodb
@@ -12,12 +12,20 @@ services:
       - MONGODB_DATABASE=docapi
   redis:
     image: redis
+    ports: #optional, for development purpose
+      - "6379:6379"
   backend:
     build: ./docapi-server
-    ports:
+    ports: #optional, for development purpose
       - "1337:1337"
-    volumes: #for development mode
+    volumes: #optional, for development purpose
       - ./docapi-server:/var/www
     depends_on:
       - mongodb
       - redis
+  frontend:
+    build: ./docapi-client
+    ports:
+      - "8898:8080"
+    depends_on:
+      - backend
