@@ -2,10 +2,15 @@ FROM nginx
 
 RUN apt-get update -y
 
-RUN apt-get install nano curl wget -y
+RUN apt-get install nano curl wget xz-utils -y
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs
+RUN mkdir /nodejs && wget https://nodejs.org/dist/v6.9.3/node-v6.9.3-linux-x64.tar.xz && tar xf node-v6.9.3-linux-x64.tar.xz -C /nodejs
+
+ENV PATH $PATH:/nodejs/node-v6.9.3-linux-x64/bin
+
+# Uncomment this if behind-a-proxy
+#RUN npm config set proxy http://$http_proxy -g && \
+#    npm config set https_proxy http://$https_proxy
 
 RUN npm install -g angular-cli
 
