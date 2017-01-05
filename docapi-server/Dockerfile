@@ -1,13 +1,9 @@
-FROM ubuntu
+FROM node
 
-RUN apt-get update -y
-
-RUN apt-get install nano curl wget -y
-
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - && \
-    apt-get install -y nodejs npm
-
-RUN npm install -g sails
+# Uncomment this if behind-a-proxy
+#RUN npm config set https-proxy http://$https_proxy -g && \
+#    npm config set proxy http://$http_proxy -g && \
+#    npm install -g sails
 
 ENV DIR /var/www
 
