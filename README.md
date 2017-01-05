@@ -35,4 +35,9 @@ And of course Docapi itself is open source with a [public repository][docapi]
    [Docker]: <http://docker.com>
 
    
+### How to install
 
+1. Make sure you installed Docker and Docker Compose
+2. Clone or download source
+3. Go into root and `docker-compose up -d`
+4. Open browser and brower to `localhost:8898`
