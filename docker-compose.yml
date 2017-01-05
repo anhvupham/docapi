@@ -2,8 +2,8 @@ version: '2'
 services:
   mongodb:
     image: 'bitnami/mongodb:latest'
-    ports: #optional, for development purpose
-      - "27017:27017"
+#    ports: #optional, for development purpose
+#      - "27017:27017"
     volumes:
       - ./data/db:/bitnami/mongodb
     environment:
@@ -12,19 +12,27 @@ services:
       - MONGODB_DATABASE=docapi
   redis:
     image: redis
-    ports: #optional, for development purpose
-      - "6379:6379"
+#    ports: #optional, for development purpose
+#      - "6379:6379"
   backend:
-    build: ./docapi-server
-    ports: #optional, for development purpose
-      - "1337:1337"
-    volumes: #optional, for development purpose
-      - ./docapi-server:/var/www
+    build:
+      context: ./docapi-server
+#      args: #optional, for behind-a-proxy purpose
+#        - https_proxy=proxy-wsa.esl.cisco.com
+#        - http_proxy=proxy-wsa.esl.cisco.com
+#    ports: #optional, for development purpose
+#      - "1337:1337"
+#    volumes: #optional, for development purpose
+#      - ./docapi-server:/var/www
     depends_on:
       - mongodb
       - redis
   frontend:
-    build: ./docapi-client
+    build:
+      context: ./docapi-client
+#      args: #optional, for behind-a-proxy purpose
+#        - https_proxy=proxy-wsa.esl.cisco.com
+#        - http_proxy=proxy-wsa.esl.cisco.com
     ports:
       - "8898:8080"
     depends_on:
