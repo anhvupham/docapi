@@ -18,8 +18,8 @@ services:
     build:
       context: ./docapi-server
 #      args: #optional, for behind-a-proxy purpose
-#        - https_proxy=proxy-wsa.esl.cisco.com
-#        - http_proxy=proxy-wsa.esl.cisco.com
+#        - https_proxy=example-proxy.com
+#        - http_proxy=example-proxy.com
 #    ports: #optional, for development purpose
 #      - "1337:1337"
 #    volumes: #optional, for development purpose
@@ -31,8 +31,8 @@ services:
     build:
       context: ./docapi-client
 #      args: #optional, for behind-a-proxy purpose
-#        - https_proxy=proxy-wsa.esl.cisco.com
-#        - http_proxy=proxy-wsa.esl.cisco.com
+#        - https_proxy=example-proxy.com
+#        - http_proxy=example-proxy.com
     ports:
       - "8898:8080"
     depends_on:
