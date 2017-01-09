@@ -1,3 +1,4 @@
+import { RouteActionComponent } from './route-action/route-action.component';
 import { RouteFormComponent } from './route-form/route-form.component';
 import { FilterRoute, Reverse } from './../pipes/util.pipe';
 import { RouteNewComponent } from './route-new/route-new.component';
@@ -38,7 +39,8 @@ const routes: Routes = [
     RouteFormComponent,
     RouteViewComponent,
     Reverse,
-    RouteEditComponent
+    RouteEditComponent,
+    RouteActionComponent
   ],
   imports: [
     RouterModule.forChild(routes),

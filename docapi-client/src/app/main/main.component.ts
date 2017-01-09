@@ -17,7 +17,7 @@ import { DeleteDialog, LogoutDialog } from './dialog/dialog.component';
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
-  providers: [ProjectService, RouteService]
+  providers: [ProjectService, RouteService],
 })
 export class MainComponent implements OnInit {
   private isMobile: boolean;
@@ -59,7 +59,10 @@ export class MainComponent implements OnInit {
           this.editMode = false;
           this.pageTitle = project.name;
           this.viewProject = project;
-          this.router.navigate(["project", project.id]);
+          this.projectService.setCurrentProject(project);
+          break;
+        case "NAVIGATE_PROJECT":
+          this.router.navigate(["project", state.value]);
           break;
         case "EDIT_PROJECT":
           this.editMode = true;
@@ -110,6 +113,7 @@ export class MainComponent implements OnInit {
 
   loadRoute(project) {
     this.obsState.next({ type: "SELECT_PROJECT", value: project });
+    this.obsState.next({ type: "NAVIGATE_PROJECT", value: project.id });
   }
 
   ngOnInit() {
@@ -118,7 +122,7 @@ export class MainComponent implements OnInit {
     this.navMode = size <= 768 ? "over" : "side";
   
     if (this.route.firstChild) {
-      Observable.combineLatest(this.route.firstChild.params, this.projectService.projects, (params: Params, projects: List<Project>) => {
+      Observable.combineLatest(this.route.firstChild.params, this.projectService.projects, (params: Params, projects: Array<Project>) => {
         let data = {
           params: params,
           projects: projects
@@ -126,13 +130,15 @@ export class MainComponent implements OnInit {
         return data;
       })
       .subscribe(data => {
-          if (data.projects.count() > 0) {
-            let currProject = data.projects.find((project: Project) => {
-              return project.id === data.params['id'];
-            });
+        if (data.projects.length > 0) {
+          let currProject = data.projects.find((project: Project) => {
+            return project.id === data.params['id'];
+          });
+          if (currProject) {
             this.obsState.next({type: "SELECT_PROJECT", value: currProject});
-          } 
-        });
+          }
+        } 
+      });
     }
   }
 

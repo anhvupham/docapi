@@ -15,9 +15,20 @@ declare var io: any;
 export class ProjectService extends BaseService {
 	private _projects: BehaviorSubject<Array<Project>> = new BehaviorSubject([]);
 	private zone: NgZone;
+	private _currentProject: BehaviorSubject<Project> = new BehaviorSubject(null);
 
 	get projects() {
 		return this._projects.asObservable();
+	}
+
+	get currentProject() {
+		return this._currentProject.asObservable().filter(project => {
+			return project !== null;
+		});
+	}
+
+	setCurrentProject(project: Project) {
+		this._currentProject.next(project);
 	}
 
 	constructor(

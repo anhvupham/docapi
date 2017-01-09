@@ -1,4 +1,5 @@
 <md-card class="card">
   <h3>View Route</h3>
+  <route-action [route]="data" [projectId]="_projectId" (deleteRouteEvent)="deleteRoute($event)"></route-action>
   <route-form [projectId]="projectId" (formSubmit)="formSubmit($event)" [readOnly]="true" [route]="data"></route-form>
 </md-card>
